@@ -88,7 +88,7 @@ public class Function {
             log.debug("Computed greeting for name={}", name);
 
             return request.createResponseBuilder(HttpStatus.OK)
-                    .body("Hello, " + name + " 👋")
+                    .body("Hello, " + name)
                     .build();
         } catch (Exception e) {
             span.recordException(e);
