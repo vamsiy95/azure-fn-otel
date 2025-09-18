@@ -23,7 +23,23 @@ It’s intentionally simple, but it covers the full path end-to-end.
 
 ---
 
-## Running locally
+## How to run this project
+
+### Prerequisites
+- [Java 17](https://adoptium.net/)  
+- [Maven](https://maven.apache.org/)  
+- [Azure Functions Core Tools](https://learn.microsoft.com/azure/azure-functions/functions-run-local)  
+- [Docker + Docker Compose](https://docs.docker.com/get-docker/)  
+
+---
+
+### 1. Start the Grafana LGTM stack
+From the `observability/` folder:
+
+```bash
+cd observability
+docker compose up -d
+
 
 ### 1. Start the observability stack
 ```bash
