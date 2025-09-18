@@ -1,0 +1,49 @@
+otelcol.receiver.otlp "in" {
+  grpc { endpoint = "0.0.0.0:4317" }
+}
+
+otelcol.processor.batch "all" {}
+
+otelcol.exporter.otlp "to_tempo" {
+  client {
+    endpoint = "http://tempo:4317"
+    tls { insecure = true }
+  }
+}
+
+otelcol.exporter.otlp "to_mimir" {
+  client {
+    endpoint = "http://mimir:4317"
+    tls { insecure = true }
+  }
+}
+
+loki.write "to_loki" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+otelcol.exporter.loki "to_loki_otlp" {
+  forward_to = [loki.write.to_loki.receiver]
+}
+
+otelcol.service "pipeline" {
+  pipelines {
+    traces = {
+      receivers  = [otelcol.receiver.otlp.in],
+      processors = [otelcol.processor.batch.all],
+      exporters  = [otelcol.exporter.otlp.to_tempo],
+    }
+    metrics = {
+      receivers  = [otelcol.receiver.otlp.in],
+      processors = [otelcol.processor.batch.all],
+      exporters  = [otelcol.exporter.otlp.to_mimir],
+    }
+    logs = {
+      receivers  = [otelcol.receiver.otlp.in],
+      processors = [otelcol.processor.batch.all],
+      exporters  = [otelcol.exporter.loki.to_loki_otlp],
+    }
+  }
+}
