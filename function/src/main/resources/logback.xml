@@ -1,1 +1,17 @@
+<configuration>
+  <!-- Console with a clear pattern -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5level [%thread] %logger{36} trace_id=%X{trace_id:-} span_id=%X{span_id:-} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- OpenTelemetry appender pushes LogRecords via the SDK -->
+  <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.v1_0.OpenTelemetryAppender"/>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="OTEL" />
+  </root>
+</configuration>
 
