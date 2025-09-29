@@ -1,0 +1,36 @@
+server:
+  http_listen_port: 3200
+  log_level: info
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+        http:
+
+ingester:
+  lifecycler:
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+  trace_idle_period: 10s
+  max_block_bytes: 1000000
+  max_block_duration: 5m
+
+compactor:
+  compaction:
+    # how long to retain compacted blocks
+    block_retention: 24h
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /var/tempo/traces           # replaces old "working_directory"
+    wal:
+      path: /var/tempo/wal
+
+overrides:
+  max_traces_per_user: 1000000
